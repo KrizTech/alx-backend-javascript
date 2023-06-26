@@ -1,6 +1,6 @@
 # Alx Backend JS
 
-![](https://www.springboard.com/blog/wp-content/uploads/2022/06/software-engineer-salary-2022.png)
+![](https://www.itprotoday.com/sites/itprotoday.com/files/software-developer_0.jpg)
 
 ## Projects
 
