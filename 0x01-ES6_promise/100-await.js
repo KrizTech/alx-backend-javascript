@@ -9,3 +9,4 @@ export default async function asyncUploadUser() {
   } catch (err) {
     return Promise.resolve({ photo: null, user: null });
   }
+}
