@@ -1,31 +1,25 @@
-const fs = require('fs');
+const {readFile} = requie("fs");
 
-async function countStudents(path) {
-  let data;
-  try {
-    data = await fs.promises.readFile(path, 'utf8');
-  } catch (error) {
-    throw new Error('Cannot load the database');
-  }
-  const students = data.split('\r\n').slice(1)
-    .map((student) => student.split(','))
-    .map((student) => ({
-      firstName: student[0],
-      lastName: student[1],
-      age: student[2],
-      field: student[3],
-    }));
-    let fields = students.map(student => student.field);
-    let unique_fields = new Set(fields);
-    let students_by_field = {};
-    for (let field of unique_fields) {
-      students_by_field[field] = [];
-    }
-    for (let student of students) {
-        students_by_field[student.field].push(student.firstName);
-    }
-    console.log(students_by_field);
-    return students_by_field;
+module.exports = function readDatabase(filePath) {
+    const students = {};
+    return new Promise((resolve, reject) => {
+	readFile(filePath, (err, data) => {
+	    if (err) {
+		reject(err);
+	    }
+	    const lines = data.toString().split('\n');
+	    const noHeader = lines.slice(1);
+	    for (let i=0; i < noHeader.length; i++) {
+		if (noHeader[i]) {
+		    let field = noHeader[i].toString().split(',');
+		    if (students.hasOwnProperty(field[3])) {
+			students[field[3]].push(field[0]);
+		    } else {
+			students[field[3]] = [field[0]];
+		    }
+		}
+	    }
+	    resolve(students);
+	});
+    });
 }
-
-module.exports = countStudents;
